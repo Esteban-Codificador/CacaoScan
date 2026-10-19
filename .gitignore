@@ -1,0 +1,23 @@
+# Salida de compilacion. Sin la barra inicial el patron se aplica en
+# cualquier nivel, no solo en la raiz: asi tambien excluye app/build/.
+build/
+.gradle/
+.cxx/
+.externalNativeBuild/
+captures/
+
+# Entorno local del equipo
+*.iml
+.idea/
+local.properties
+.DS_Store
+
+# FASE RELEASE - credenciales de firma.
+# Estos archivos NUNCA deben versionarse: quien los tenga puede publicar
+# actualizaciones que el sistema operativo aceptara como legitimas.
+keystore.properties
+*.jks
+*.keystore
+
+# FASE DEPLOY - credenciales de servicio de Firebase.
+firebase-service-account.json

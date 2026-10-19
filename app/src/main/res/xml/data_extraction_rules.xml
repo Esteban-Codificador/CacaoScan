@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    RNF06 - Privacidad de los datos.
+
+    Se excluye TODO del respaldo en la nube y de la transferencia entre
+    dispositivos: las fotografias de las vainas y el historial son datos del
+    cultivo del productor y deben permanecer unicamente en su telefono.
+
+    Complementa a android:allowBackup="false", que cubre las versiones de
+    Android anteriores a la 12.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="file" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>

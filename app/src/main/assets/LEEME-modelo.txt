@@ -1,0 +1,16 @@
+COLOQUE AQUI EL MODELO ENTRENADO
+=================================
+
+Nombre esperado del archivo:
+
+    cacao_pod_classifier.tflite
+
+Mientras este archivo no exista, la aplicacion arranca en MODO DEMOSTRACION y
+muestra un aviso permanente: los resultados son simulados y no provienen de
+ningun modelo entrenado.
+
+Antes de dar por buena ninguna clasificacion, confirme los parametros del modelo
+en ml/ModelSpec.kt (tamano de entrada, normalizacion, formato de salida y, sobre
+todo, EL ORDEN DE LAS ETIQUETAS).
+
+El procedimiento completo esta en /docs/07-integracion-del-modelo.md

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        RNF02 / RNF06 - Funcionamiento sin conexion y privacidad.
+
+        Esta aplicacion NO declara android.permission.INTERNET de forma deliberada.
+        Sin ese permiso el sistema operativo impide cualquier acceso de red: la
+        ausencia de transmision de datos deja de ser una promesa del codigo y pasa
+        a ser una garantia verificable de la plataforma. Es la evidencia mas fuerte
+        de cumplimiento de RNF05 ("cero transmision de datos a servidores externos").
+
+        Consecuencia asumida: no hay analitica ni reporte remoto de errores.
+    -->
+
+    <!-- RF01 - Captura de imagen mediante camara. Se solicita en tiempo de ejecucion. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--
+        CameraX arrastra de forma transitiva androidx.media3, que declara
+        ACCESS_NETWORK_STATE. CacaoScan no consulta el estado de la red en ningun
+        punto, asi que ese permiso se elimina del manifiesto fusionado: cada
+        permiso que aparece en la ficha de la aplicacion sin usarse es ruido para
+        el usuario y superficie de exposicion innecesaria.
+    -->
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
+
+    <!--
+        RF02 - Seleccion desde galeria mediante el Selector de Fotos del sistema
+        (ActivityResultContracts.PickVisualMedia), que NO requiere permisos de
+        almacenamiento en ninguna version de Android soportada.
+    -->
+
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
+    <application
+        android:name=".CacaoScanApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CacaoScan"
+        tools:targetApi="34">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.CacaoScan"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
