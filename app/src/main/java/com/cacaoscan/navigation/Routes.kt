@@ -31,6 +31,16 @@ object Routes {
     /** Pantalla de demostracion academica de seguridad. No forma parte del flujo principal. */
     const val SECURITY = "security"
 
+    /**
+     * Modulo de administracion: los dos microservicios del proyecto. Es la unica
+     * zona de la aplicacion que usa la red, y ninguna pantalla del productor
+     * navega hacia ella salvo el acceso explicito desde Inicio.
+     */
+    const val ADMIN = "admin"
+    const val ADMIN_MODELOS = "admin/modelos"
+    const val ADMIN_CALIDAD = "admin/calidad"
+    const val ADMIN_MONITOR = "admin/monitor"
+
     const val ARG_SCAN_ID = "scanId"
     private const val HISTORY_DETAIL_BASE = "history_detail"
     const val HISTORY_DETAIL = "$HISTORY_DETAIL_BASE/{$ARG_SCAN_ID}"

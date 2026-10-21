@@ -10,6 +10,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.cacaoscan.presentation.admin.AdminScreen
+import com.cacaoscan.presentation.admin.CalidadScreen
+import com.cacaoscan.presentation.admin.ModelosScreen
+import com.cacaoscan.presentation.admin.MonitorScreen
 import com.cacaoscan.presentation.auth.LoginScreen
 import com.cacaoscan.presentation.history.HistoryDetailScreen
 import com.cacaoscan.presentation.history.HistoryScreen
@@ -26,7 +30,8 @@ import com.cacaoscan.presentation.security.SecurityScreen
  *   Inicio
  *     |-- Escanear  (subgrafo: captura -> resultado)
  *     |-- Historial (lista -> detalle)
- *     +-- Informacion
+ *     |-- Informacion
+ *     +-- Administracion (microservicios: modelos, calidad, monitoreo)
  *
  * Captura y resultado viven en un subgrafo propio y comparten un mismo
  * ScanViewModel, obtenido a partir de la entrada del subgrafo. Asi el resultado
@@ -59,6 +64,7 @@ fun CacaoScanApp(navController: NavHostController = rememberNavController()) {
                 onHistoryClick = { navController.navigate(Routes.HISTORY) },
                 onInfoClick = { navController.navigate(Routes.INFO) },
                 onSecurityClick = { navController.navigate(Routes.SECURITY) },
+                onAdminClick = { navController.navigate(Routes.ADMIN) },
             )
         }
 
@@ -121,6 +127,51 @@ fun CacaoScanApp(navController: NavHostController = rememberNavController()) {
             SecurityScreen(
                 viewModel = hiltViewModel(),
                 onNavigateBack = { navController.popBackStack() },
+            )
+        }
+
+        // ---------------------------------------------------- administracion
+
+        // Si el token caduco, se vuelve al login vaciando la pila: no debe
+        // quedar ninguna pantalla de administracion accesible con Atras.
+        val iniciarSesion: () -> Unit = {
+            navController.navigate(Routes.LOGIN) {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+
+        composable(Routes.ADMIN) {
+            AdminScreen(
+                viewModel = hiltViewModel(),
+                onNavigateBack = { navController.popBackStack() },
+                onModelosClick = { navController.navigate(Routes.ADMIN_MODELOS) },
+                onCalidadClick = { navController.navigate(Routes.ADMIN_CALIDAD) },
+                onMonitorClick = { navController.navigate(Routes.ADMIN_MONITOR) },
+                onIniciarSesion = iniciarSesion,
+            )
+        }
+
+        composable(Routes.ADMIN_MODELOS) {
+            ModelosScreen(
+                viewModel = hiltViewModel(),
+                onNavigateBack = { navController.popBackStack() },
+                onIniciarSesion = iniciarSesion,
+            )
+        }
+
+        composable(Routes.ADMIN_CALIDAD) {
+            CalidadScreen(
+                viewModel = hiltViewModel(),
+                onNavigateBack = { navController.popBackStack() },
+                onIniciarSesion = iniciarSesion,
+            )
+        }
+
+        composable(Routes.ADMIN_MONITOR) {
+            MonitorScreen(
+                viewModel = hiltViewModel(),
+                onNavigateBack = { navController.popBackStack() },
+                onIniciarSesion = iniciarSesion,
             )
         }
     }

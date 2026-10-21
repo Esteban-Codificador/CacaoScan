@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Politica de red de CacaoScan.
+
+    Desde Android 9 (API 28) el trafico sin cifrar esta prohibido por omision.
+    Los dos microservicios del proyecto se ejecutan sobre HTTP simple en la red
+    local del equipo, de modo que hace falta permitirlo de forma explicita.
+
+    DECISION Y SU COSTE. Se permite el trafico sin cifrar de forma general y no
+    solo para un dominio concreto, porque la direccion del equipo que ejecuta los
+    microservicios la escribe la persona que administra: es 10.0.2.2 en el
+    emulador, pero una direccion privada cualquiera (192.168.x.x) desde un
+    telefono real, y la politica de red de Android no admite rangos ni comodines.
+
+    El coste asumido es que, si en el futuro alguna parte de la aplicacion hiciera
+    una peticion HTTP a un servidor publico, el sistema ya no la bloquearia. Hoy
+    no existe tal peticion: el unico codigo que abre un socket es
+    com.cacaoscan.data.remote, y solo apunta a la direccion configurada.
+
+    La alternativa correcta para un despliegue real seria servir los
+    microservicios tras TLS y restringir aqui el dominio. Queda anotado como
+    trabajo futuro en /docs/12-microservicios-en-la-app.md.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

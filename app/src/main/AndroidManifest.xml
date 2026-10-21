@@ -2,31 +2,43 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--
-        RNF02 / RNF06 - Funcionamiento sin conexion y privacidad.
-
-        Esta aplicacion NO declara android.permission.INTERNET de forma deliberada.
-        Sin ese permiso el sistema operativo impide cualquier acceso de red: la
-        ausencia de transmision de datos deja de ser una promesa del codigo y pasa
-        a ser una garantia verificable de la plataforma. Es la evidencia mas fuerte
-        de cumplimiento de RNF05 ("cero transmision de datos a servidores externos").
-
-        Consecuencia asumida: no hay analitica ni reporte remoto de errores.
-    -->
-
     <!-- RF01 - Captura de imagen mediante camara. Se solicita en tiempo de ejecucion. -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <!--
-        CameraX arrastra de forma transitiva androidx.media3, que declara
-        ACCESS_NETWORK_STATE. CacaoScan no consulta el estado de la red en ningun
-        punto, asi que ese permiso se elimina del manifiesto fusionado: cada
-        permiso que aparece en la ficha de la aplicacion sin usarse es ruido para
-        el usuario y superficie de exposicion innecesaria.
+        RED - Modulo de administracion (FASE 14).
+
+        CacaoScan declaraba deliberadamente NINGUN permiso de red. Ese permiso se
+        anade ahora por una necesidad concreta y acotada: el modulo de
+        administracion consume los dos microservicios del proyecto (Registro de
+        Modelos y Control de Calidad de Imagenes) para poder operarlos y
+        monitorizarlos desde la propia aplicacion.
+
+        LIMITE QUE SE MANTIENE. El flujo del productor -RF01 a RF06: camara,
+        clasificacion, resultado e historial- NO realiza ninguna peticion de red
+        en ningun punto. Toda la inferencia sigue siendo local, con el modelo
+        .tflite empaquetado en el APK, y ninguna fotografia ni resultado sale del
+        dispositivo. RNF02 (funcionamiento sin conexion) y RNF05 (cero
+        transmision de datos del productor) siguen cumpliendose.
+
+        Lo que cambia es que esa garantia ya no la impone el sistema operativo por
+        ausencia del permiso, sino la arquitectura: el unico codigo que abre un
+        socket vive en com.cacaoscan.data.remote, al que solo llegan las pantallas
+        de presentation.admin, protegidas por el login y por los scopes
+        'servicios:leer' y 'servicios:escribir'. Se documenta en
+        /docs/12-microservicios-en-la-app.md y en /docs/06-seguridad-y-autorizacion.md.
+
+        El cambio fue solicitado de forma expresa y queda registrado como
+        ampliacion declarada de alcance, no como deriva.
     -->
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"
-        tools:node="remove" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!--
+        El modulo de administracion comprueba si hay red antes de intentar hablar
+        con los microservicios, para poder distinguir "el telefono no tiene red"
+        de "el servicio esta caido". Son dos mensajes distintos para quien opera.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!--
         RF02 - Seleccion desde galeria mediante el Selector de Fotos del sistema
@@ -44,6 +56,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CacaoScan"

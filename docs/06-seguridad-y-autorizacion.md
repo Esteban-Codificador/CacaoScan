@@ -95,6 +95,22 @@ el login alimenta directamente al mecanismo de autorización que ya existía.
 
 ---
 
+## 1 ter. Segundo cambio de alcance: red para el módulo de administración
+
+Para mostrar los dos microservicios dentro de la aplicación se añadieron los
+permisos `INTERNET` y `ACCESS_NETWORK_STATE`. El detalle está en
+`docs/12-microservicios-en-la-app.md`. Lo relevante para seguridad:
+
+- **El flujo del productor sigue sin red.** El único código que abre un socket
+  está en `data/remote` y solo lo alcanzan las pantallas de `presentation/admin`.
+- **La autorización deja de ser solo demostración.** Se añadieron los scopes
+  `servicios:leer` y `servicios:escribir`; las pantallas de administración los
+  exigen en cada carga y en cada escritura.
+- **Al microservicio de calidad solo viajan metadatos** de una foto (nombre,
+  dimensiones, peso y clases anotadas), nunca los píxeles.
+- **Riesgo asumido:** tráfico HTTP sin cifrar en la red local. Mitigación futura:
+  TLS en los servicios y dominio restringido en la política de red.
+
 ## 2. Autenticación local real: `AppLock`
 
 **Qué es.** Bloqueo opcional de la aplicación mediante `BiometricPrompt`: huella, rostro o la

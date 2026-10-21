@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Shield
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cacaoscan.presentation.common.CacaoScreen
 import com.cacaoscan.presentation.common.NavigationCard
+import com.cacaoscan.presentation.common.SecondaryAction
 import com.cacaoscan.presentation.theme.CacaoScanTheme
 
 /**
@@ -38,6 +40,7 @@ fun HomeScreen(
     onHistoryClick: () -> Unit,
     onInfoClick: () -> Unit,
     onSecurityClick: () -> Unit,
+    onAdminClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CacaoScreen(
@@ -97,6 +100,17 @@ fun HomeScreen(
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 onClick = onInfoClick,
             )
+
+            Spacer(Modifier.height(8.dp))
+
+            // Acceso al modulo de administracion. Va como accion secundaria, al
+            // final y con menos peso visual: no es una tarea del productor y no
+            // debe competir con "Escanear vaina" (RNF03).
+            SecondaryAction(
+                text = "Administracion y microservicios",
+                icon = Icons.Default.AdminPanelSettings,
+                onClick = onAdminClick,
+            )
         }
     }
 }
@@ -110,6 +124,7 @@ private fun HomeScreenPreview() {
             onHistoryClick = {},
             onInfoClick = {},
             onSecurityClick = {},
+            onAdminClick = {},
         )
     }
 }
